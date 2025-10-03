@@ -234,7 +234,7 @@ exports.sendotp = async (req, res) => {
   try {
     let { email } = req.body;
 
-    // ✅ Basic email validation
+    //  Basic email validation
     if (!email || typeof email !== "string" || !email.includes("@")) {
       return res.status(400).json({
         success: false,
@@ -242,11 +242,11 @@ exports.sendotp = async (req, res) => {
       });
     }
 
-    // ✅ Normalize email (trim spaces, lowercase)
+    //  Normalize email (trim spaces, lowercase)
     email = email.trim().toLowerCase();
     console.log("Received email for OTP:", email);
 
-    // ✅ Check if user already exists
+    //  Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(401).json({
@@ -255,7 +255,7 @@ exports.sendotp = async (req, res) => {
       });
     }
 
-    // ✅ Generate a unique 6-digit OTP
+    //  Generate a unique 6-digit OTP
     let otp;
     let existingOTP;
 
@@ -269,11 +269,11 @@ exports.sendotp = async (req, res) => {
       existingOTP = await OTP.findOne({ otp });
     } while (existingOTP);
 
-    // ✅ Store OTP in DB — triggers email via Mongoose pre-save hook
+    //  Store OTP in DB — triggers email via Mongoose pre-save hook
     const otpDoc = await OTP.create({ email, otp });
     console.log("OTP stored:", otpDoc);
 
-    // ✅ Send success response (DO NOT return OTP)
+    //  Send success response (DO NOT return OTP)
     res.status(200).json({
       success: true,
       message: "OTP sent successfully",
