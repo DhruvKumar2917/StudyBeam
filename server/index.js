@@ -25,12 +25,24 @@ database.connect();
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
-app.use(
-	cors({
-		origin: "https://edtech1-studynotion.vercel.app",
-		credentials: true,
-	})
-);
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://edtech1-studynotion.vercel.app",
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 
 app.use(
 	fileUpload({
