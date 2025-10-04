@@ -29,7 +29,8 @@ app.use(cookieParser());
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://edtech1-studynotion.vercel.app",
+  "https://edtech-studynotion-h7zw.onrender.com", // ✅ your actual frontend URL
+  "https://edtech1-studynotion.vercel.app",        // optional if still used
 ];
 
 const corsOptions = {
@@ -37,11 +38,13 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.log("CORS blocked origin:", origin); // 🔍 log it for debugging
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true,
 };
+
 
 app.use(cors(corsOptions));
 
