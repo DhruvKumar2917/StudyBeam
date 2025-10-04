@@ -34,14 +34,14 @@
 
 import axios from "axios";
 
-// Base URL from your environment variables
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
-// Create a reusable axios instance (optional but good for scaling)
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
-  // You can add default headers, timeout, etc. here if needed
-  // timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",  // ✅ ensure JSON is sent
+  },
+  withCredentials: true, // only if using cookies/JWT
 });
 
 export const apiConnector = async (
@@ -56,14 +56,15 @@ export const apiConnector = async (
       method,
       url: endpoint,
       data: data || null,
-      headers: headers || {},
+      headers: {
+        "Content-Type": "application/json",
+        ...headers, // merge custom headers if any
+      },
       params: params || null,
     });
 
     return response;
   } catch (error) {
-    // Optional: log or handle error here
-    // You can customize the returned error for better debugging
     if (error.response) {
       console.error("API Error Response:", error.response);
     } else {
