@@ -41,15 +41,15 @@ const mailSender = async (email, title, body) => {
 
     let info = await transporter.sendMail({
       from: `"studynotion | CodeHelp" <${process.env.MAIL_USER}>`,
-      to: email,
-      subject: title,
-      html: body,
+      to: `${email}`, // list of receivers
+      subject: `${title}`, // Subject line
+      html: `${body}`, // html body
     });
 
-    console.log("✅ Email sent successfully:", info.response);
+    console.log("Email sent successfully:", info.response);
     return info;
   } catch (error) {
-    console.error("❌ Error sending email:", error);
+    console.error("Error sending email:", error);
     return null;
   }
 }
