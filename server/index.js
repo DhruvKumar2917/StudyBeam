@@ -21,15 +21,15 @@ dotenv.config();
 
 // Connecting to database
 database.connect();
- 
+
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
-  cors({
-    origin: "https://edtech-studynotion-three.vercel.app",
-    credentials: true,
-  })
+	cors({
+		origin: "https://edtech1-studynotion.vercel.app",
+		credentials: true,
+	})
 );
 
 app.use(
