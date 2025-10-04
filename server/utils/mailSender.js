@@ -56,35 +56,60 @@
 
 // module.exports = mailSender
 
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
+
+// const mailSender = async (email, title, body) => {
+//   try {
+//     let transporter = nodemailer.createTransport({
+//       host: process.env.MAIL_HOST,       // smtp.gmail.com
+//       port: 587,                         // STARTTLS port
+//       secure: false,                     // false for STARTTLS
+//       requireTLS: true,                  // enforce TLS
+//       auth: {
+//         user: process.env.MAIL_USER,
+//         pass: process.env.MAIL_PASS,     // Gmail App Password
+//       },
+//       tls: {
+//         rejectUnauthorized: false,       // allow cloud server certs
+//       },
+//     });
+
+//     let info = await transporter.sendMail({
+//       from: `"studynotion | CodeHelp" <${process.env.MAIL_USER}>`,
+//       to: email,
+//       subject: title,
+//       html: body,
+//     });
+
+//     console.log("Email sent successfully:", info.response);
+//     return info;
+//   } catch (error) {
+//     console.error("Error sending email:", error);
+//     return null;
+//   }
+// };
+
+// module.exports = mailSender;
+
+
+const { Resend } = require('resend');
+
+// Use your Resend API key (set in .env)
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const mailSender = async (email, title, body) => {
   try {
-    let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,       // smtp.gmail.com
-      port: 587,                         // STARTTLS port
-      secure: false,                     // false for STARTTLS
-      requireTLS: true,                  // enforce TLS
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,     // Gmail App Password
-      },
-      tls: {
-        rejectUnauthorized: false,       // allow cloud server certs
-      },
-    });
-
-    let info = await transporter.sendMail({
-      from: `"studynotion | CodeHelp" <${process.env.MAIL_USER}>`,
+    const response = await resend.emails.send({
+      from: 'noreply@studynotion-backend.com', // ✅ You can verify your own sender later
       to: email,
       subject: title,
       html: body,
     });
 
-    console.log("Email sent successfully:", info.response);
-    return info;
+    console.log("Resend email sent:", response);
+    return response;
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending email with Resend:", error);
     return null;
   }
 };
