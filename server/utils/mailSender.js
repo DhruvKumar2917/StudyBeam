@@ -92,26 +92,37 @@
 // module.exports = mailSender;
 
 
+// mailSender.js
+
+// Polyfill for fetch and Headers (needed for Resend in Node.js)
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+global.fetch = fetch;
+
+import('node-fetch').then(({ Headers }) => {
+  global.Headers = Headers;
+});
+
 const { Resend } = require('resend');
 
-// Use your Resend API key (set in .env)
+// Use your Resend API key (stored in .env)
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const mailSender = async (email, title, body) => {
   try {
     const response = await resend.emails.send({
-      from: 'noreply@studynotion-backend.com', // ✅ You can verify your own sender later
+      from: 'noreply@studynotion-backend.com', // must be verified in Resend
       to: email,
       subject: title,
       html: body,
     });
 
-    console.log("Resend email sent:", response);
+    console.log("✅ Resend email sent:", response);
     return response;
   } catch (error) {
-    console.error("Error sending email with Resend:", error);
+    console.error("❌ Error sending email with Resend:", error);
     return null;
   }
 };
 
 module.exports = mailSender;
+
